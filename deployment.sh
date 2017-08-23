@@ -14,7 +14,6 @@ createLambdaFunction() {
 	fi
 }
 
-sudo apt-get update && apt-get install -y awscli
 FILE_NAME="target/qwertee-1.0-SNAPSHOT.jar"
 FUNCTION_NAME="qwertee-tee-finder"
 S3_BUCKET="daily-tee-finder-deployment"
