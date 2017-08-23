@@ -5,6 +5,10 @@ configure() {
 	aws configure set output json
 }
 
+uploadArtifactS3() {
+	aws s3 cp ${FILE_NAME} s3://${S3_BUCKET}/
+}
+
 createLambdaFunction() {
 	if aws lambda get-function --function-name ${FUNCTION_NAME} --query 'Configuration.FunctionName'
 	then
@@ -18,7 +22,6 @@ FILE_NAME="target/qwertee-1.0-SNAPSHOT.jar"
 FUNCTION_NAME="qwertee-tee-finder"
 S3_BUCKET="daily-tee-finder-deployment"
 configure
-createPackage
 uploadArtifactS3
 rm ${FILE_NAME}
 createLambdaFunction
