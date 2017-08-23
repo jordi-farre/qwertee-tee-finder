@@ -39,3 +39,7 @@ jobs:
 
       # run create package
       - run: mvn package
+
+      - deploy:
+        command: |
+          .deployment.sh
