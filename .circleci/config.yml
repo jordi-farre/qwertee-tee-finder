@@ -41,7 +41,7 @@ jobs:
       - run: mvn package
 
       - deploy:
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            .deployment.sh
-          fi
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              .deployment.sh
+            fi
