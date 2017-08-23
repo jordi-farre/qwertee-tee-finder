@@ -3,9 +3,11 @@ package tee.finder.qwertee;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class Hello implements RequestHandler<String, String> {
+import java.util.Map;
 
-    public String handleRequest(String input, Context context) {
+public class Hello implements RequestHandler<Map<String, String>, String> {
+
+    public String handleRequest(Map<String, String> input, Context context) {
         return "Hello " + input;
     }
 
