@@ -6,7 +6,7 @@ configure() {
 }
 
 uploadArtifactS3() {
-	aws s3 cp ${FILE_NAME} s3://${S3_BUCKET}/
+	aws s3 cp target/${FILE_NAME} s3://${S3_BUCKET}/
 }
 
 createLambdaFunction() {
@@ -18,7 +18,7 @@ createLambdaFunction() {
 	fi
 }
 
-FILE_NAME="target/qwertee-1.0-SNAPSHOT.jar"
+FILE_NAME="qwertee-1.0-SNAPSHOT.jar"
 FUNCTION_NAME="qwertee-tee-finder"
 S3_BUCKET="daily-tee-finder-deployment"
 configure
