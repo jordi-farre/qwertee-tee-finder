@@ -19,8 +19,7 @@ public class GetAndStoreTeesFeature {
     @Mock
     private SiteRepository siteRepository;
 
-    @Mock
-    private SiteClient siteClient;
+    private SiteClient siteClient = new SiteClient();
 
     private SiteService siteService;
 
