@@ -15,7 +15,7 @@ createLambdaFunction() {
 	then
 		aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${FILE_NAME}
 	else
-		aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role arn:aws:iam::175801550592:role/lambda_basic_execution --handler tee.finder.qwertee.Hello::handleRequest --runtime java8
+		aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role arn:aws:iam::175801550592:role/lambda_basic_execution --handler tee.finder.qwertee.Application::handleRequest --runtime java8
 	fi
 }
 
