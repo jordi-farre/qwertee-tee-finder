@@ -19,7 +19,7 @@ public class GetAndStoreTeesFeature {
     @Mock
     private SiteRepository siteRepository;
 
-    private SiteClient siteClient = new SiteClient();
+    private SiteClient siteClient = new SiteClient(this.getClass().getClassLoader().getResource("/qwertee_rss.xml"));
 
     private SiteService siteService;
 
