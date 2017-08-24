@@ -16,8 +16,6 @@ public class ScheduledEventDto {
 
     private String time;
 
-    private String id;
-
     private List<String> resources;
 
     private String id;
