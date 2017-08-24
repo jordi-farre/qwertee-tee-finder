@@ -1,11 +1,19 @@
 package tee.finder.qwertee;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class SiteService {
 
+    private SiteClient siteClient;
+    private SiteRepository siteRepository;
+
+    public SiteService(SiteClient siteClient, SiteRepository siteRepository) {
+        this.siteClient = siteClient;
+        this.siteRepository = siteRepository;
+    }
+
+
     public void getAndStoreInformation() {
-        throw new IllegalStateException();
+        Site site = this.siteClient.get();
+        this.siteRepository.save(site);
     }
 
 }

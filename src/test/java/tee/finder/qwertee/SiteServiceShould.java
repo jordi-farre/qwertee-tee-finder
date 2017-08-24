@@ -9,12 +9,15 @@ import org.mockito.Mockito;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Date;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetAndStoreTeesFeature {
+public class SiteServiceShould {
 
+    private SiteService siteService;
 
     @Mock
     private SiteRepository siteRepository;
@@ -22,17 +25,16 @@ public class GetAndStoreTeesFeature {
     @Mock
     private SiteClient siteClient;
 
-    private SiteService siteService;
-
     @Before
     public void initialize() {
-        this.siteService = new SiteService(this.siteClient, this.siteRepository);
+        this.siteService = new SiteService(siteClient, siteRepository);
     }
 
     @Test
-    public void get_site_information_from_rss_and_store() {
-        Site expectedSite = null;
+    public void get_site_information_and_store() {
+        Site expectedSite = getExpectedSite();
         ReflectionEquals reflectionEquals = new ReflectionEquals(expectedSite, null);
+        Mockito.when(this.siteClient.get()).thenReturn(expectedSite);
 
         this.siteService.getAndStoreInformation();
 
@@ -41,5 +43,12 @@ public class GetAndStoreTeesFeature {
         Site savedSite = siteCaptor.getValue();
         assertThat(reflectionEquals.matches(savedSite), is(true));
     }
-    
+
+    private Site getExpectedSite() {
+        Tee teeOne = new Tee("Low Social Battery", "https://www.qwertee.com/", "https://cdn.qwertee.com/images/designs/zoom/121045.jpg", new Date());
+        Tee teeTwo = new Tee("I hate unicorns!", "https://www.qwertee.com/", "https://cdn.qwertee.com/images/designs/zoom/120766.jpg", new Date());
+        Tees tees = new Tees(teeOne, teeTwo);
+        return new Site("Qwertee", "https://www.qwertee.com/", tees);
+    }
+
 }
