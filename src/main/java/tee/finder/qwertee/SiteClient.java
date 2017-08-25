@@ -28,8 +28,8 @@ public class SiteClient {
 
     public Either<String, Site> get() {
         SyndFeedInput syndFeedInput = new SyndFeedInput();
-        try {
-            SyndFeed feed = syndFeedInput.build(new XmlReader(this.url));
+        try (XmlReader xmlReader = new XmlReader(this.url)) {
+            SyndFeed feed = syndFeedInput.build(xmlReader);
             List<Tee> tees = feed.getEntries().stream()
                     .map(this::createTee)
                     .collect(Collectors.toList());
