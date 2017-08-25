@@ -1,5 +1,6 @@
 package tee.finder.qwertee;
 
+import io.vavr.control.Either;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +37,7 @@ public class SiteServiceShould {
     public void get_site_information_and_store() throws ParseException {
         Site expectedSite = SiteObjectMother.getExpectedSite();
         ReflectionEquals reflectionEquals = new ReflectionEquals(expectedSite, null);
-        Mockito.when(this.siteClient.get()).thenReturn(expectedSite);
+        Mockito.when(this.siteClient.get()).thenReturn(Either.right(expectedSite));
 
         this.siteService.getAndStoreInformation();
 

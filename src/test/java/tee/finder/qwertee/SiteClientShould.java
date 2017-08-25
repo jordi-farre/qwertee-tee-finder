@@ -30,7 +30,7 @@ public class SiteClientShould {
     public void should_get_site_information() throws ParseException, JsonProcessingException {
         Site expectedSite = SiteObjectMother.getExpectedSite();
 
-        Site retrievedSite = this.siteClient.get();
+        Site retrievedSite = this.siteClient.get().get();
 
         assertThat(getJsonValue(retrievedSite), is(getJsonValue(expectedSite)));
     }

@@ -5,6 +5,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import io.vavr.control.Either;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -21,20 +22,19 @@ public class SiteClient {
         this.url = url;
     }
 
-    public Site get() {
+    public Either<String, Site> get() {
         SyndFeedInput syndFeedInput = new SyndFeedInput();
         try {
             SyndFeed feed = syndFeedInput.build(new XmlReader(this.url));
             List<Tee> tees = feed.getEntries().stream()
                     .map(this::createTee)
                     .collect(Collectors.toList());
-            return new Site("Qwertee", feed.getLink(), new Tees(tees.toArray(new Tee[]{})));
+            return Either.right(new Site("Qwertee", feed.getLink(), new Tees(tees.toArray(new Tee[]{}))));
         } catch (FeedException e) {
-            e.printStackTrace();
+            return Either.left(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            return Either.left(e.getMessage());
         }
-        return null;
     }
 
     private Tee createTee(SyndEntry entry) {

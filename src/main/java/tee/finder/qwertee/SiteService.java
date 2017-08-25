@@ -17,8 +17,8 @@ public class SiteService {
 
 
     public void getAndStoreInformation() {
-        Site site = this.siteClient.get();
-        this.siteRepository.save(site);
+        this.siteClient.get().peek(s -> this.siteRepository.save(s));
+
     }
 
 }
