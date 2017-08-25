@@ -10,6 +10,7 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
@@ -32,8 +33,8 @@ public class SiteServiceShould {
     }
 
     @Test
-    public void get_site_information_and_store() {
-        Site expectedSite = getExpectedSite();
+    public void get_site_information_and_store() throws ParseException {
+        Site expectedSite = SiteObjectMother.getExpectedSite();
         ReflectionEquals reflectionEquals = new ReflectionEquals(expectedSite, null);
         Mockito.when(this.siteClient.get()).thenReturn(expectedSite);
 
@@ -43,13 +44,6 @@ public class SiteServiceShould {
         Mockito.verify(this.siteRepository).save(siteCaptor.capture());
         Site savedSite = siteCaptor.getValue();
         assertThat(reflectionEquals.matches(savedSite), is(true));
-    }
-
-    private Site getExpectedSite() {
-        Tee teeOne = new Tee("Low Social Battery", "https://www.qwertee.com/", "https://cdn.qwertee.com/images/designs/zoom/121045.jpg", new Date());
-        Tee teeTwo = new Tee("I hate unicorns!", "https://www.qwertee.com/", "https://cdn.qwertee.com/images/designs/zoom/120766.jpg", new Date());
-        Tees tees = new Tees(teeOne, teeTwo);
-        return new Site("Qwertee", "https://www.qwertee.com/", tees);
     }
 
 }
