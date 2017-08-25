@@ -34,4 +34,5 @@ public class Tee {
     public Date getDate() {
         return date;
     }
+
 }

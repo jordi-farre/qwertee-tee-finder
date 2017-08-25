@@ -25,4 +25,5 @@ public class Site {
     public Tees getTees() {
         return tees;
     }
+
 }

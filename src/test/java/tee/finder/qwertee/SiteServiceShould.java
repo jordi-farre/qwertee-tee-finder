@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
