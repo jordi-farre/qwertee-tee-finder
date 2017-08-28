@@ -1,25 +1,19 @@
 package tee.finder.qwertee;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.S3Object;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
-import java.util.Scanner;
+
+import static org.apache.log4j.Logger.getLogger;
 
 public class Application implements RequestHandler<ScheduledEventDto, String> {
 
-    private Logger LOG = LoggerFactory.getLogger(Application.class);
+    private Logger LOG = getLogger(Application.class);
 
     public String handleRequest(ScheduledEventDto input, Context context) {
         try {
