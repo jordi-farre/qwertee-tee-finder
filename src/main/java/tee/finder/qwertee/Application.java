@@ -30,6 +30,4 @@ public class Application implements RequestHandler<ScheduledEventDto, String> {
         return "OK";
     }
 
-
-
 }
