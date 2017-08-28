@@ -8,8 +8,6 @@ import com.rometools.rome.io.XmlReader;
 import io.vavr.control.Either;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,8 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SiteClient {
-
-    private Logger LOGGER = LoggerFactory.getLogger(SiteClient.class);
 
     private URL url;
 
@@ -35,10 +31,10 @@ public class SiteClient {
                     .collect(Collectors.toList());
             return Either.right(new Site("Qwertee", feed.getLink(), new Tees(tees.toArray(new Tee[]{}))));
         } catch (FeedException e) {
-            LOGGER.error("Error reading feed", e);
+            System.err.println("Error reading feed: " + e.getMessage());
             return Either.left(e.getMessage());
         } catch (IOException e) {
-            LOGGER.error("Error reading feed", e);
+            System.err.println("Error reading feed: " + e.getMessage());
             return Either.left(e.getMessage());
         }
     }
