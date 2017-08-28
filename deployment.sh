@@ -7,9 +7,9 @@ configure() {
 
 ROLE_ARN="none"
 createRole() {
-    aws iam create-role --role-name qwertee_lambda_role --assume-role-policy-document file://assumeRolePolicyDocument.json
-    aws iam put-role-policy --role-name qwertee_lambda_role --policy-name s3 --policy-document file://s3PolicyFile.json
-    aws iam get-role --role-name test_lambda | ./jq.sh '.Role.Arn'
+    aws iam create-role --role-name ${ROLE_NAME} --assume-role-policy-document file://assumeRolePolicyDocument.json
+    aws iam put-role-policy --role-name ${ROLE_NAME} --policy-name s3 --policy-document file://s3PolicyFile.json
+    aws iam get-role --role-name ${ROLE_NAME} | ./jq.sh '.Role.Arn'
 }
 
 uploadArtifactS3() {
@@ -26,6 +26,7 @@ createLambdaFunction() {
 	fi
 }
 
+ROLE_NAME="qwertee-lambda-role"
 FILE_NAME="qwertee-1.0-SNAPSHOT.jar"
 RELEASE_NAME="qwertee-${CIRCLE_BUILD_NUM}.jar"
 FUNCTION_NAME="qwertee-tee-finder"
