@@ -9,6 +9,7 @@ ROLE_ARN="none"
 createRole() {
     aws iam create-role --role-name ${ROLE_NAME} --assume-role-policy-document file://assumeRolePolicyDocument.json
     aws iam put-role-policy --role-name ${ROLE_NAME} --policy-name s3 --policy-document file://s3PolicyFile.json
+    aws iam put-role-policy --role-name ${ROLE_NAME} --policy-name s3 --policy-document file://logPolicyFile.json
     ROLE_ARN=$(aws iam get-role --role-name ${ROLE_NAME} | ./jq.sh -r '.Role.Arn')
 }
 
