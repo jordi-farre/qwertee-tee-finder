@@ -15,6 +15,11 @@
             <version>1.1.0</version>
         </dependency>
         <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-log4j</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.rometools</groupId>
             <artifactId>rome</artifactId>
             <version>1.7.4</version>

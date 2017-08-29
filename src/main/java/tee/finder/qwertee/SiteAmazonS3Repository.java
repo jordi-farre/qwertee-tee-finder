@@ -1,11 +1,14 @@
 package tee.finder.qwertee;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SiteAmazonS3Repository implements SiteRepository {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SiteAmazonS3Repository.class);
 
     private AmazonS3 s3Client;
 
@@ -20,11 +23,9 @@ public class SiteAmazonS3Repository implements SiteRepository {
     public void save(Site site) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            System.out.println("Storing object " + site.getName() + " on bucket " + this.bucket);
-            PutObjectResult result = this.s3Client.putObject(this.bucket, site.getName(), objectMapper.writeValueAsString(site));
-            System.out.println("Result: " +  result.getContentMd5());
+            this.s3Client.putObject(this.bucket, site.getName(), objectMapper.writeValueAsString(site));
         } catch (JsonProcessingException e) {
-            System.err.println("Error saving site: " + e.getMessage());
+            LOGGER.error("Error saving site", e);
         }
     }
 
