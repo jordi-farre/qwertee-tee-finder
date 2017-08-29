@@ -21,7 +21,7 @@ uploadArtifactS3() {
 createLambdaFunction() {
 	if aws lambda get-function --function-name ${FUNCTION_NAME} --query 'Configuration.FunctionName'
 	then
-		aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${FILE_NAME}
+		aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
 	else
 		aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8
 	fi
