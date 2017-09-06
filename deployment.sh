@@ -18,13 +18,24 @@ uploadArtifactS3() {
 	aws s3 cp ${RELEASE_NAME} s3://${S3_BUCKET}/
 }
 
+createFunction() {
+    FUNCTION_VERSION=$(aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8 --timeout 30 --memory-size 256 --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production} --publish | ./jq.sh -r '.Version')
+    aws lambda create-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
+}
+
+updateFunction() {
+    aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production}
+    aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
+    FUNCTION_VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME | ./jq.sh -r '.Version')
+    aws lambda update-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
+}
+
 createLambdaFunction() {
 	if aws lambda get-function --function-name ${FUNCTION_NAME} --query 'Configuration.FunctionName'
 	then
-	    aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production}
-		aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
+        updateFunction
 	else
-		aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8 --timeout 30 --memory-size 256 --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET}
+        createFunction
 	fi
 }
 
