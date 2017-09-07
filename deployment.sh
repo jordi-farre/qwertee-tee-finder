@@ -21,7 +21,7 @@ uploadArtifactS3() {
 createFunction() {
     FUNCTION_VERSION=$(aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8 --timeout 30 --memory-size 256 --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production} --publish | ./jq.sh -r '.Version')
     FUNCTION_RESULT=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".StatusCode")
-    if [ $FUNCTION_RESULT == '200' ]; then
+    if [ "$FUNCTION_RESULT" == "200" ]; then
         aws lambda create-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
     else
         exit 1
@@ -33,7 +33,7 @@ updateFunction() {
     aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
     FUNCTION_VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME | ./jq.sh -r '.Version')
     FUNCTION_RESULT=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".StatusCode")
-    if [ $FUNCTION_RESULT == '200' ]; then
+    if [ "$FUNCTION_RESULT" == "200" ]; then
         aws lambda update-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
     else
         exit 1
