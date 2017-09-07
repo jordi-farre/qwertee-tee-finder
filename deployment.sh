@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 configure() {
 	aws configure set default.region us-east-1
