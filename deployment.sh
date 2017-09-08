@@ -25,7 +25,7 @@ createFunction() {
     echo "Function $FUNCTION_NAME created with version $FUNCTION_VERSION"
     FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
-    if [ -z "$FUNCTION_ERROR" ]; then
+    if [ "$FUNCTION_ERROR" = null ]; then
         aws lambda create-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
         echo "Alias PRODUCTION created for $FUNCTION_NAME with version $FUNCTION_VERSION"
     else
@@ -40,7 +40,7 @@ updateFunction() {
     echo "Function $FUNCTION_NAME updated with version $FUNCTION_VERSION"
     FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
-    if [ -z "$FUNCTION_ERROR" ]; then
+    if [ "$FUNCTION_ERROR" = null ]; then
         aws lambda update-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
         echo "Alias PRODUCTION updated for $FUNCTION_NAME with version $FUNCTION_VERSION"
     else
