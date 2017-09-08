@@ -37,7 +37,7 @@ updateFunction() {
     aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production}
     aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
     FUNCTION_VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME | ./jq.sh -r '.Version')
-    echo "Function $FUNCTION_NAME created with version $FUNCTION_VERSION"
+    echo "Function $FUNCTION_NAME updated with version $FUNCTION_VERSION"
     FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
     if [ -z "$FUNCTION_ERROR" ]; then
