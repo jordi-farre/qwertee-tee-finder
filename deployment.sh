@@ -26,10 +26,10 @@ createFunction() {
     FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
     if [ -z "$FUNCTION_ERROR" ]; then
-        exit 1
-    else
         aws lambda create-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
         echo "Alias PRODUCTION created for $FUNCTION_NAME with version $FUNCTION_VERSION"
+    else
+        exit 1
     fi
 }
 
@@ -41,10 +41,10 @@ updateFunction() {
     FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
     if [ -z "$FUNCTION_ERROR" ]; then
-        exit 1
-    else
         aws lambda update-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
         echo "Alias PRODUCTION updated for $FUNCTION_NAME with version $FUNCTION_VERSION"
+    else
+        exit 1
     fi
 }
 
