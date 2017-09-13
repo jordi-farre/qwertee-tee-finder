@@ -57,6 +57,15 @@ createLambdaFunction() {
 	fi
 }
 
+createEvent() {
+    RULE_ARN=$(aws events put-rule --name every_hour --schedule-expression "cron(0 0/1 * * ? *)" | ./jq.sh -r '.RuleArn')
+    echo "Created/updated rule $RULE_ARN"
+    aws lambda add-permission --function-name ${FUNCTION_NAME}:PRODUCTION --statement-id '$FUNCTION_NAME' --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $RULE_ARN
+    FUNCTION_ARN=$(aws lambda get-alias --function-name $FUNCTION_NAME --name PRODUCTION)
+    echo "Adding event to function $FUNCTION_ARN"
+    aws events put-targets --rule every_hour --targets "Id"="1","Arn"="$FUNCTION_ARN"
+}
+
 ROLE_NAME="qwertee-lambda-role"
 FILE_NAME="qwertee-1.0-SNAPSHOT.jar"
 RELEASE_NAME="qwertee-${CIRCLE_BUILD_NUM}.jar"
@@ -67,3 +76,4 @@ createRole
 uploadArtifactS3
 rm ${FILE_NAME}
 createLambdaFunction
+createEvent
