@@ -61,7 +61,7 @@ createEvent() {
     RULE_ARN=$(aws events put-rule --name every_hour --schedule-expression "cron(0 0/1 * * ? *)" | ./jq.sh -r '.RuleArn')
     echo "Created/updated rule $RULE_ARN"
     aws lambda add-permission --function-name ${FUNCTION_NAME}:PRODUCTION --statement-id $FUNCTION_NAME --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $RULE_ARN
-    FUNCTION_ARN=$(aws lambda get-alias --function-name $FUNCTION_NAME --name PRODUCTION)
+    FUNCTION_ARN=$(aws lambda get-alias --function-name $FUNCTION_NAME --name PRODUCTION | ./jq.sh -r '.AliasArn')
     echo "Adding event to function $FUNCTION_ARN"
     aws events put-targets --rule every_hour --targets "Id"="1","Arn"="$FUNCTION_ARN"
 }
