@@ -2,6 +2,7 @@ package tee.finder.qwertee;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -36,9 +37,8 @@ public class SiteRepositoryIT {
 
     @Before
     public void initialize() {
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAIP2UFQCQFHY4TOZQ", "AVpvRhcOUuGkC2GUubS4kp5k60FVpLJzkWRvSBly");
         this.s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds)).withRegion(Regions.US_EAST_1)
+                .withCredentials(new DefaultAWSCredentialsProviderChain()).withRegion(Regions.US_EAST_1)
                 .build();
         this.siteRepository = new SiteAmazonS3Repository(this.s3Client, SITE_TEES_DEVELOPMENT);
     }
