@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Application implements RequestHandler<String, String> {
+public class Application implements RequestHandler<ScheduledEventDto, String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
-    public String handleRequest(String input, Context context) {
+    public String handleRequest(ScheduledEventDto input, Context context) {
         try {
             LOGGER.info("Application startup");
             SiteClient siteClient = new SiteClient(new URL(System.getenv("QWERTEE_URL")));
