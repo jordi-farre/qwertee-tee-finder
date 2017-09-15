@@ -13,6 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -38,6 +39,7 @@ public class SiteServiceShould {
         Site expectedSite = SiteObjectMother.getExpectedSite();
         ReflectionEquals reflectionEquals = new ReflectionEquals(expectedSite, null);
         Mockito.when(this.siteClient.get()).thenReturn(Either.right(expectedSite));
+        Mockito.when(this.siteRepository.getByName(expectedSite.getName())).thenReturn(Optional.empty());
 
         this.siteService.getAndStoreInformation();
 

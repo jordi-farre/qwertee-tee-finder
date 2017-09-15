@@ -3,6 +3,7 @@ package tee.finder.qwertee;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.TimeZone;
 
 public class SiteService {
@@ -17,7 +18,12 @@ public class SiteService {
 
 
     public void getAndStoreInformation() {
-        this.siteClient.get().peek(s -> this.siteRepository.save(s));
+        this.siteClient.get().peek(s -> {
+            Optional<Site> savedSite = this.siteRepository.getByName(s.getName());
+            if (!savedSite.isPresent()) {
+                this.siteRepository.save(s);
+            }
+        });
 
     }
 

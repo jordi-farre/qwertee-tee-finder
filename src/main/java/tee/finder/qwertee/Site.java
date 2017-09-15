@@ -1,5 +1,6 @@
 package tee.finder.qwertee;
 
+
 public class Site {
 
     private String name;
@@ -7,6 +8,10 @@ public class Site {
     private String url;
 
     private Tees tees;
+
+    public Site() {
+        // TODO: Remove this constructor
+    }
 
     public Site(String name, String url, Tees tees) {
         this.name = name;

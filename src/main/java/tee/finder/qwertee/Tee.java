@@ -12,6 +12,10 @@ public class Tee {
 
     private Date date;
 
+    public Tee() {
+        // TODO: Remove this constructor
+    }
+
     public Tee(String title, String link, String image, Date date) {
         this.title = title;
         this.link = link;
