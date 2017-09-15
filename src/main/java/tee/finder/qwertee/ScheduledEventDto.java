@@ -154,8 +154,9 @@ public class ScheduledEventDto {
                 '}';
     }
 
-    private class Detail {
+    public static class Detail {
 
 
     }
+
 }
