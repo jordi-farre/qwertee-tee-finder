@@ -1,10 +1,8 @@
 package tee.finder.qwertee;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import tee.finder.qwertee.domain.Site;
+
 import java.util.Optional;
-import java.util.TimeZone;
 
 public class SiteService {
 

@@ -1,7 +1,5 @@
 package tee.finder.qwertee;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -9,12 +7,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Pattern;
-import org.hamcrest.core.Is;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import tee.finder.qwertee.domain.Site;
 
 import java.text.ParseException;
 import java.util.Optional;
@@ -40,7 +36,7 @@ public class SiteRepositoryIT {
         this.s3Client = AmazonS3ClientBuilder.standard()
                 .withCredentials(new DefaultAWSCredentialsProviderChain()).withRegion(Regions.US_EAST_1)
                 .build();
-        this.siteRepository = new SiteAmazonS3Repository(this.s3Client, SITE_TEES_DEVELOPMENT);
+        this.siteRepository = new SiteAmazonS3Repository(this.s3Client, SITE_TEES_DEVELOPMENT, new SiteAdapter());
     }
 
     @After

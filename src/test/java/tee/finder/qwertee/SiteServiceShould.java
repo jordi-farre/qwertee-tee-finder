@@ -9,10 +9,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.runners.MockitoJUnitRunner;
+import tee.finder.qwertee.domain.Site;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;

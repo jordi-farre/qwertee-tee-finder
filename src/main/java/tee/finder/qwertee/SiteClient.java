@@ -10,6 +10,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tee.finder.qwertee.domain.Site;
+import tee.finder.qwertee.domain.Tee;
+import tee.finder.qwertee.domain.Tees;
 
 import java.io.IOException;
 import java.net.URL;

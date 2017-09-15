@@ -1,4 +1,4 @@
-package tee.finder.qwertee;
+package tee.finder.qwertee.domain;
 
 import java.util.Date;
 
@@ -11,10 +11,6 @@ public class Tee {
     private String image;
 
     private Date date;
-
-    public Tee() {
-        // TODO: Remove this constructor
-    }
 
     public Tee(String title, String link, String image, Date date) {
         this.title = title;

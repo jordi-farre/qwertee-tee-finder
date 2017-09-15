@@ -1,4 +1,4 @@
-package tee.finder.qwertee;
+package tee.finder.qwertee.infrastructure;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

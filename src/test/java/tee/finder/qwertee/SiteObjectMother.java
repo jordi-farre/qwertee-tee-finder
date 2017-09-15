@@ -1,6 +1,9 @@
 package tee.finder.qwertee;
 
-import java.text.ParseException;
+import tee.finder.qwertee.domain.Site;
+import tee.finder.qwertee.domain.Tee;
+import tee.finder.qwertee.domain.Tees;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
