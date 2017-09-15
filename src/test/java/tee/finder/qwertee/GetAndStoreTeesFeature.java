@@ -3,6 +3,9 @@ package tee.finder.qwertee;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.vavr.control.Either;
+import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,6 +65,21 @@ public class GetAndStoreTeesFeature {
 
         verify(this.siteRepository).getByName(expectedSite.getName());
         verifyNoMoreInteractions(this.siteRepository);
+    }
+
+    @Test
+    public void get_site_information_from_rss_and_store_if_still_exists_and_has_changes() throws JsonProcessingException {
+        Site expectedSite = SiteObjectMother.getExpectedSite();
+        Site oldSite = SiteObjectMother.getSiteWithChanges();
+        when(this.siteRepository.getByName(expectedSite.getName())).thenReturn(Optional.of(oldSite));
+
+        this.siteService.getAndStoreInformation();
+
+        verify(this.siteRepository).getByName(expectedSite.getName());
+        ArgumentCaptor<Site> siteCaptor = ArgumentCaptor.forClass(Site.class);
+        verify(this.siteRepository).save(siteCaptor.capture());
+        Site savedSite = siteCaptor.getValue();
+        assertThat(getJsonValue(savedSite), is(getJsonValue(expectedSite)));
     }
 
     private String getJsonValue(Site savedSite) throws JsonProcessingException {

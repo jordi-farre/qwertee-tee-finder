@@ -18,7 +18,7 @@ public class SiteService {
     public void getAndStoreInformation() {
         this.siteClient.get().peek(s -> {
             Optional<Site> savedSite = this.siteRepository.getByName(s.getName());
-            if (!savedSite.isPresent()) {
+            if (!savedSite.isPresent() || !savedSite.get().equals(s)) {
                 this.siteRepository.save(s);
             }
         });

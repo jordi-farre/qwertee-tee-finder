@@ -15,4 +15,18 @@ public class Tees {
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tees tees = (Tees) o;
+
+        return value != null ? value.equals(tees.value) : tees.value == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
 }
