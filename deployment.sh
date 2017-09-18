@@ -10,7 +10,7 @@ createRole() {
     aws iam create-role --role-name ${ROLE_NAME} --assume-role-policy-document file://assumeRolePolicyDocument.json
     aws iam put-role-policy --role-name ${ROLE_NAME} --policy-name s3 --policy-document file://s3PolicyFile.json
     aws iam put-role-policy --role-name ${ROLE_NAME} --policy-name logs --policy-document file://logPolicyFile.json
-    ROLE_ARN=$(aws iam get-role --role-name ${ROLE_NAME} | ./jq.sh -r '.Role.Arn')
+    ROLE_ARN=$(aws iam get-role --role-name ${ROLE_NAME} | jq -r '.Role.Arn')
     echo "Role $ROLE_NAME created with arn $ROLE_ARN"
 }
 
@@ -21,9 +21,9 @@ uploadArtifactS3() {
 }
 
 createFunction() {
-    FUNCTION_VERSION=$(aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8 --timeout 30 --memory-size 256 --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production} --publish | ./jq.sh -r '.Version')
+    FUNCTION_VERSION=$(aws lambda create-function --region us-east-1 --function-name $FUNCTION_NAME --code S3Bucket=${S3_BUCKET},S3Key=${RELEASE_NAME} --role ${ROLE_ARN} --handler tee.finder.qwertee.Application::handleRequest --runtime java8 --timeout 30 --memory-size 256 --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production} --publish | jq -r '.Version')
     echo "Function $FUNCTION_NAME created with version $FUNCTION_VERSION"
-    FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
+    FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | jq -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
     if [ "$FUNCTION_ERROR" = null ]; then
         aws lambda create-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
@@ -36,9 +36,9 @@ createFunction() {
 updateFunction() {
     aws lambda update-function-configuration --function-name $FUNCTION_NAME --environment Variables={QWERTEE_URL=https://www.qwertee.com/rss,S3_BUCKET=site-tees-production}
     aws lambda update-function-code --function-name $FUNCTION_NAME --s3-bucket ${S3_BUCKET} --s3-key ${RELEASE_NAME}
-    FUNCTION_VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME | ./jq.sh -r '.Version')
+    FUNCTION_VERSION=$(aws lambda publish-version --function-name $FUNCTION_NAME | jq -r '.Version')
     echo "Function $FUNCTION_NAME updated with version $FUNCTION_VERSION"
-    FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | ./jq.sh -r ".FunctionError")
+    FUNCTION_ERROR=$(aws lambda invoke --function-name $FUNCTION_NAME /dev/null | jq -r ".FunctionError")
     echo "Function $FUNCTION_NAME executed with error $FUNCTION_ERROR"
     if [ "$FUNCTION_ERROR" = null ]; then
         aws lambda update-alias --function-name $FUNCTION_NAME --name PRODUCTION --function-version $FUNCTION_VERSION
@@ -58,10 +58,10 @@ createLambdaFunction() {
 }
 
 createEvent() {
-    RULE_ARN=$(aws events put-rule --name every_hour --schedule-expression "cron(0 0/1 * * ? *)" | ./jq.sh -r '.RuleArn')
+    RULE_ARN=$(aws events put-rule --name every_hour --schedule-expression "cron(0 0/1 * * ? *)" | jq -r '.RuleArn')
     echo "Created/updated rule $RULE_ARN"
     aws lambda add-permission --function-name ${FUNCTION_NAME}:PRODUCTION --statement-id $FUNCTION_NAME --action 'lambda:InvokeFunction' --principal events.amazonaws.com --source-arn $RULE_ARN
-    FUNCTION_ARN=$(aws lambda get-alias --function-name $FUNCTION_NAME --name PRODUCTION | ./jq.sh -r '.AliasArn')
+    FUNCTION_ARN=$(aws lambda get-alias --function-name $FUNCTION_NAME --name PRODUCTION | jq -r '.AliasArn')
     echo "Adding event to function $FUNCTION_ARN"
     aws events put-targets --rule every_hour --targets "Id"="1","Arn"="$FUNCTION_ARN"
 }
